@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>환율계산서비스</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+          crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+          integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
+          crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script
+            src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+</head>
+<body>
+
+
+<form>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>환율 계산</h1>
+                <div class="form-show-div" class="form-group">
+                    송금국가 : 미국(USD)
+                </div>
+                <div class="form-show-div" class="form-group">
+                    수취국가 :
+                    <select name="quotedCurrency">
+                        <option value="KOR">한국(KRW)</option>
+                        <option value="JPN">일본(JPN)</option>
+                        <option value="PHL">필리핀(PHP)</option>
+                    </select>
+                </div>
+                <div>
+                    환율 : <span id="rate"></span>
+                </div>
+                <div>
+                    송금액 : <input type="text" id="remittance" name="Remittance"/> USD
+                </div>
+                <div class="submit-button">
+                    <button class="btn btn-primary" type="button" id="submitBtn" name="submitBtn">Submit</button>
+                </div>
+                <div>
+                    <span id="amount"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+</body>
+</html>
