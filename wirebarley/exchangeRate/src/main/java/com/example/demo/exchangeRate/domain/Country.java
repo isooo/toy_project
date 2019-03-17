@@ -3,12 +3,12 @@ package com.example.demo.exchangeRate.domain;
 public enum Country {
     USA("USD"),
     KOR("KRW"),
-    JPN("JPN"),
+    JPN("JPY"),
     PHL("PHP");
 
     private final String currencyUnit;
 
-    Country(String currencyUnit) {
+    Country(final String currencyUnit) {
         this.currencyUnit = currencyUnit;
     }
 
