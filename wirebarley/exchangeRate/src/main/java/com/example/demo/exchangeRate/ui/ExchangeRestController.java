@@ -3,48 +3,39 @@ package com.example.demo.exchangeRate.ui;
 import com.example.demo.exchangeRate.application.ExchangeResponse;
 import com.example.demo.exchangeRate.application.ExchangeService;
 import com.example.demo.exchangeRate.domain.ExchangeRate;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
-
 @RestController
 public class ExchangeRestController {
-    @Autowired
+    private static final Logger LOGGER = LoggerFactory.getLogger(ExchangeRestController.class);
+
     private ExchangeService service;
 
+    public ExchangeRestController(ExchangeService service) {
+        this.service = service;
+    }
+
     @GetMapping(value = "/rate")
-    public ExchangeRate rate(
+    public ResponseEntity<ExchangeRate> rate(
             @RequestParam(value = "base") String base,
             @RequestParam(value = "quotes") String quotes
     ) {
-        ExchangeRate exchangeRate = null;
-        try {
-            if(!quotes.isEmpty()) {
-                exchangeRate = service.getRateInfo(base, quotes);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return exchangeRate;
+        LOGGER.info("/rate {" + "base=" + base + ", quotes=" + quotes + "}");
+        return ResponseEntity.ok(service.getRateInfo(base, quotes));
     }
 
     @GetMapping(value = "/amount")
-    public ExchangeResponse amount(
+    public ResponseEntity<ExchangeResponse> amount(
             @RequestParam(value = "base") String base,
             @RequestParam(value = "quotes") String quotes,
             @RequestParam(value = "remittance") double remittance
     ) {
-        ExchangeResponse response = null;
-        try {
-            response = service.getAmount(base, quotes, remittance);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return response;
+        LOGGER.info("/rate {" + "base=" + base + ", quotes=" + quotes + ", remittance=" + remittance + "}");
+        return ResponseEntity.ok(service.getAmount(base, quotes, remittance));
     }
-
 }

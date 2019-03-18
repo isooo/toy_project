@@ -12,9 +12,8 @@ public class ExchangeController {
     public ModelAndView index(
             @RequestParam(value = "base", defaultValue = "USA") String base
     ) {
-        final ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("index");
         final Country baseCountry = Country.valueOf(base);
+        final ModelAndView modelAndView = new ModelAndView("index");
         modelAndView.addObject("base", baseCountry);
         modelAndView.addObject("quotes", Country.valuesExcludeBase(baseCountry));
         return modelAndView;
