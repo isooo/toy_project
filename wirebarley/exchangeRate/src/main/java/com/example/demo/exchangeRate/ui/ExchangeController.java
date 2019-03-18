@@ -1,11 +1,22 @@
 package com.example.demo.exchangeRate.ui;
 
-import com.example.demo.exchangeRate.application.ExchangeService;
-import org.springframework.web.bind.annotation.RestController;
+import com.example.demo.exchangeRate.domain.Country;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
-@RestController
+@Controller
 public class ExchangeController {
-
-    private ExchangeService service;
-
+    @GetMapping("/")
+    public ModelAndView index(
+            @RequestParam(value = "base", defaultValue = "USA") String base
+    ) {
+        final ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("index");
+        final Country baseCountry = Country.valueOf(base);
+        modelAndView.addObject("base", baseCountry);
+        modelAndView.addObject("quotes", Country.valuesExcludeBase(baseCountry));
+        return modelAndView;
+    }
 }
