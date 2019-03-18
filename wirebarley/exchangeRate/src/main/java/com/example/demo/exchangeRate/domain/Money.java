@@ -7,7 +7,7 @@ public class Money {
         if (value < 0) {
             throw new IllegalArgumentException();
         }
-        this.value = Math.round(value * 100) / 100.0;;
+        this.value = value;
     }
 
     public double getValue() {
