@@ -44,19 +44,21 @@
     $('#quotes').change(function () {
         const base = '{{base.value}}';
         const quotes = $('#quotes option:selected').val();
+
+        if (quotes === "") {
+            $('#submitBtn').prop('disabled', true);
+            $('#rate').text('');
+            return false;
+        }
+
         $.ajax({
             url: '/rate?base=' + base + '&quotes=' + quotes,
             success: function (data) {
                 console.log(data);
-                if (data == "") {
-                    $('#submitBtn').prop('disabled', true);
-                    $('#rate').text('');
-                } else {
-                    $('#submitBtn').prop('disabled', false);
-                    const rate = numberWithCommas(data.rate);
-                    const currency = data.quotedCurrency + '/' + data.baseCurrency;
-                    $('#rate').text(rate + ' ' + currency);
-                }
+                $('#submitBtn').prop('disabled', false);
+                const rate = numberWithCommas(data.rate);
+                const currency = data.quotedCurrency + '/' + data.baseCurrency;
+                $('#rate').text(rate + ' ' + currency);
             }
         })
     })
@@ -65,6 +67,13 @@
         const base = '{{base.value}}';
         const quotes = $('#quotes option:selected').val();
         const remittance = $('#remittance').val();
+
+        if (!$.isNumeric(remittance)) {
+            $('#amount').css('color', 'red');
+            $('#amount').text("송금액이 바르지 않습니다.");
+            return false;
+        }
+
         $.ajax({
             url: '/amount?base=' + base + '&quotes=' + quotes + '&remittance=' + remittance,
             success: function (data) {
@@ -77,12 +86,12 @@
                     + amount
                     + ' '
                     + exchangeRate.quotedCurrency
-                    +' 입니다.'
+                    + ' 입니다.'
                 );
             },
-            error: function () {
+            error: function (error) {
                 $('#amount').css('color', 'red');
-                $('#amount').text('송금액이 바르지 않습니다');
+                $('#amount').text(error.responseText);
             }
         })
     })
