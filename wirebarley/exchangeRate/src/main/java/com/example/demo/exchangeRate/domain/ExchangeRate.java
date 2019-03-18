@@ -14,15 +14,21 @@ public class ExchangeRate {
     ) {
         this.base = base;
         this.quotes = quotes;
-        this.rate = rate;
+        this.rate = Math.round(rate * 100) / 100.0;
     }
 
     public double getRate() {
         return rate;
     }
 
+//    public String getQuotedCurrency() {
+//        return quotes.getCurrencyUnit() + "/" + base.getCurrencyUnit();
+//    }
+    public String getBaseCurrency() {
+        return base.getCurrencyUnit();
+    }
     public String getQuotedCurrency() {
-        return quotes.getCurrencyUnit() + "/" + base.getCurrencyUnit();
+        return quotes.getCurrencyUnit();
     }
 
     public Money exchange(final Money money) {
