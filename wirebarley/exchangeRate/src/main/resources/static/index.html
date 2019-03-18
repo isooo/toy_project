@@ -8,53 +8,90 @@
           href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
           crossorigin="anonymous">
-
-    <!-- Optional theme -->
-    <link rel="stylesheet"
-          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
-          integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
-          crossorigin="anonymous">
-
-    <!-- Latest compiled and minified JavaScript -->
-    <script
-            src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
-            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-            crossorigin="anonymous"></script>
 </head>
 <body>
-
-
-<form>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <h1>환율 계산</h1>
-                <div class="form-show-div" class="form-group">
-                    송금국가 : 미국(USD)
-                </div>
-                <div class="form-show-div" class="form-group">
-                    수취국가 :
-                    <select name="quotedCurrency">
-                        <option value="KOR">한국(KRW)</option>
-                        <option value="JPN">일본(JPN)</option>
-                        <option value="PHL">필리핀(PHP)</option>
-                    </select>
-                </div>
-                <div>
-                    환율 : <span id="rate"></span>
-                </div>
-                <div>
-                    송금액 : <input type="text" id="remittance" name="Remittance"/> USD
-                </div>
-                <div class="submit-button">
-                    <button class="btn btn-primary" type="button" id="submitBtn" name="submitBtn">Submit</button>
-                </div>
-                <div>
-                    <span id="amount"></span>
-                </div>
-            </div>
-        </div>
+<div class="col-md-12">
+    <h1>환율 계산</h1>
+    <div>
+        송금국가 : {{base.name}}({{base.currencyUnit}})
     </div>
-</form>
+    <div>
+        수취국가 :
+        <select name="quotes" id="quotes">
+            <option value="">국가를 선택해주세요</option>
+            {{#quotes}}
+            <option value="{{value}}">{{name}}({{currencyUnit}})</option>
+            {{/quotes}}
+        </select>
+    </div>
+    <div>
+        환율 : <span id="rate"></span>
+    </div>
+    <div>
+        송금액 : <input type="text" id="remittance" name="Remittance"/> {{base.currencyUnit}}
+    </div>
+    <div class="submit-button" style="margin: 5px 0px;">
+        <button class="btn btn-primary" type="button" id="submitBtn" name="submitBtn" disabled="true">
+            Submit
+        </button>
+    </div>
+    <div>
+        <span id="amount"></span>
+    </div>
+</div>
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script>
+    $('#quotes').change(function () {
+        const base = '{{base.value}}';
+        const quotes = $('#quotes option:selected').val();
+        $.ajax({
+            url: '/rate?base=' + base + '&quotes=' + quotes,
+            success: function (data) {
+                console.log(data);
+                if (data == "") {
+                    $('#submitBtn').prop('disabled', true);
+                    $('#rate').text('');
+                } else {
+                    $('#submitBtn').prop('disabled', false);
+                    const rate = numberWithCommas(data.rate);
+                    const currency = data.quotedCurrency + '/' + data.baseCurrency;
+                    $('#rate').text(rate + ' ' + currency);
+                }
+            }
+        })
+    })
+
+    $('#submitBtn').click(function () {
+        const base = '{{base.value}}';
+        const quotes = $('#quotes option:selected').val();
+        const remittance = $('#remittance').val();
+        $.ajax({
+            url: '/amount?base=' + base + '&quotes=' + quotes + '&remittance=' + remittance,
+            success: function (data) {
+                console.log(data)
+                const exchangeRate = data.exchangeRate;
+                const amount = numberWithCommas(data.amount.value);
+                $('#amount').css('color', 'black');
+                $('#amount').text(
+                    '수취금액은 '
+                    + amount
+                    + ' '
+                    + exchangeRate.quotedCurrency
+                    +' 입니다.'
+                );
+            },
+            error: function () {
+                $('#amount').css('color', 'red');
+                $('#amount').text('송금액이 바르지 않습니다');
+            }
+        })
+    })
+
+    function numberWithCommas(n) {
+        const num = n.toFixed(2);
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+</script>
 </body>
 </html>
