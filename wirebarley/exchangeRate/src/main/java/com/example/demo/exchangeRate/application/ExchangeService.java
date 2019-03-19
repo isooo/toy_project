@@ -2,14 +2,17 @@ package com.example.demo.exchangeRate.application;
 
 import com.example.demo.exchangeRate.domain.Country;
 import com.example.demo.exchangeRate.domain.ExchangeRate;
+import com.example.demo.exchangeRate.domain.InvalidTransferAmount;
 import com.example.demo.exchangeRate.domain.Money;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ExchangeService {
+    private static final int DOLLAR_UPPER_LIMIT = 10_000;
+
     private ExchangeApi exchangeApi;
 
-    public ExchangeService(ExchangeApi exchangeApi) {
+    public ExchangeService(final ExchangeApi exchangeApi) {
         this.exchangeApi = exchangeApi;
     }
 
@@ -43,13 +46,14 @@ public class ExchangeService {
     }
 
     private void validate(final double remittance, final Country baseCountry) {
-        if (remittance < 0) {
-            throw new IllegalArgumentException("송금액이 바르지 않습니다.");
-        }
         if (baseCountry == Country.USA) {
-            if (remittance > 10000) {
-                throw new IllegalArgumentException("송금액이 바르지 않습니다.");
-            }
+            checkDollarUpperLimit(remittance);
+        }
+    }
+
+    private void checkDollarUpperLimit(double remittance) {
+        if (remittance > DOLLAR_UPPER_LIMIT) {
+            throw new InvalidTransferAmount();
         }
     }
 }
