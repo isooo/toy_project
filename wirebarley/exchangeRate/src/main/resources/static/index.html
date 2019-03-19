@@ -14,6 +14,7 @@
     <h1>환율 계산</h1>
     <div>
         송금국가 : {{base.name}}({{base.currencyUnit}})
+        <input type="hidden" id="base" value="{{base.value}}">
     </div>
     <div>
         수취국가 :
@@ -39,68 +40,7 @@
         <span id="amount"></span>
     </div>
 </div>
-<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
-<script>
-    $('#quotes').change(function () {
-        const base = '{{base.value}}';
-        const quotes = $('#quotes option:selected').val();
-
-        if (quotes === "") {
-            $('#submitBtn').prop('disabled', true);
-            $('#rate').text('');
-            return false;
-        }
-
-        $.ajax({
-            url: '/rate?base=' + base + '&quotes=' + quotes,
-            success: function (data) {
-                console.log(data);
-                $('#submitBtn').prop('disabled', false);
-                const rate = numberWithCommas(data.rate);
-                const currency = data.quotedCurrency + '/' + data.baseCurrency;
-                $('#rate').text(rate + ' ' + currency);
-            }
-        })
-    })
-
-    $('#submitBtn').click(function () {
-        const base = '{{base.value}}';
-        const quotes = $('#quotes option:selected').val();
-        const remittance = $('#remittance').val();
-
-        if (!$.isNumeric(remittance)) {
-            $('#amount').css('color', 'red');
-            $('#amount').text("송금액이 바르지 않습니다.");
-            return false;
-        }
-
-        $.ajax({
-            url: '/amount?base=' + base + '&quotes=' + quotes + '&remittance=' + remittance,
-            success: function (data) {
-                console.log(data)
-                const exchangeRate = data.exchangeRate;
-                const amount = numberWithCommas(data.amount.value);
-                $('#amount').css('color', 'black');
-                $('#amount').text(
-                    '수취금액은 '
-                    + amount
-                    + ' '
-                    + exchangeRate.quotedCurrency
-                    + ' 입니다.'
-                );
-            },
-            error: function (error) {
-                $('#amount').css('color', 'red');
-                $('#amount').text(error.responseText);
-            }
-        })
-    })
-
-    function numberWithCommas(n) {
-        const num = n.toFixed(2);
-        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    }
-
-</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="../index.js"></script>
 </body>
 </html>
