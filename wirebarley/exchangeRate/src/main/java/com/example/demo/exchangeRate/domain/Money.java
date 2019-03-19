@@ -5,7 +5,7 @@ public class Money {
 
     public Money(final double value) {
         if (value < 0) {
-            throw new IllegalArgumentException();
+            throw new InvalidTransferAmount();
         }
         this.value = value;
     }
