@@ -1,13 +1,13 @@
 package com.example.demo.exchangeRate.application;
 
 import com.example.demo.exchangeRate.domain.ExchangeRate;
+import com.example.demo.exchangeRate.domain.InvalidTransferAmount;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.io.IOException;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -26,7 +26,7 @@ public class ExchangeServiceTest {
     public void 환율_정보_구하기() {
         // given
         given(exchangeApi.getExchangeRate(any(), any()))
-                .willReturn(Optional.of(new ExchangeRate(any(), any(), 1000)))
+                .willReturn(Optional.of(new ExchangeRate(any(), any(), 100)))
                 ;
 
         // when
@@ -38,7 +38,7 @@ public class ExchangeServiceTest {
     }
 
     @Test
-    public void 수취_금액_구하기() throws IOException {
+    public void 수취_금액_구하기() {
         // given
         final double rate = 100;
         final double remittance = 1000;
@@ -53,17 +53,35 @@ public class ExchangeServiceTest {
         assertThat(response.getAmount().getValue()).isEqualTo(remittance * rate);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void 수취_금액_구하기_실패() throws IOException {
+    @Test(expected = InvalidTransferAmount.class)
+    public void 수취금액_입력_오류_영보다_작은_금액() {
         // given
-        final double rate = 100;
-        final double remittance = -1;
         given(exchangeApi.getExchangeRate(any(), any()))
-                .willReturn(Optional.of(new ExchangeRate(any(), any(), rate)))
+                .willReturn(Optional.of(new ExchangeRate(any(), any(), 100)))
         ;
 
         // when
-        final ExchangeResponse response = exchangeService.getAmount("USA", "JPN", remittance);
+        exchangeService.getAmount("USA", "JPN", -1);
+
+        // then
+    }
+
+    @Test(expected = InvalidTransferAmount.class)
+    public void 수취금액_입력_오류_만_달러보다_큰_금액() {
+        // given
+
+        // when
+        exchangeService.getAmount("USA", "JPN", 10_001);
+
+        // then
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void 잘못된_국가명() {
+        // given
+
+        // when
+        exchangeService.getAmount("KKK", "KKK", 100);
 
         // then
     }
