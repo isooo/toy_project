@@ -29,7 +29,7 @@ public class ExchangeApiClient implements ExchangeApi {
             final Country quotes
     ) {
         try {
-            final JsonNode root = MAPPER.readTree(getBody(getLiveUri()));
+            final JsonNode root = MAPPER.readTree(getBody(makeLiveUri()));
             final double rate = root.path("quotes")
                     .path(base.getCurrencyUnit() + quotes.getCurrencyUnit())
                     .doubleValue()
@@ -40,7 +40,7 @@ public class ExchangeApiClient implements ExchangeApi {
         }
     }
 
-    private URI getLiveUri() {
+    private URI makeLiveUri() {
         return UriComponentsBuilder.fromHttpUrl(BASE_URL)
                 .path(ENDPOINT)
                 .queryParam(QUERY_PARAM_NAME_ACCESS_KEY, ACCESS_KEY)
