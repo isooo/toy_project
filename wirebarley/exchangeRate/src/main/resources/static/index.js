@@ -27,6 +27,7 @@ function changedQuotes() {
     })
 }
 
+
 function clickedSubmitButton() {
     const param = {
         base: $('#base').val(),
@@ -34,7 +35,7 @@ function clickedSubmitButton() {
         remittance: $('#remittance').val()
     }
 
-    if (!Number.isInteger(remittance)) {
+    if (!$.isNumeric(param.remittance)) {
         $('#amount').css('color', 'red');
         $('#amount').text("송금액이 바르지 않습니다.");
         return false;
