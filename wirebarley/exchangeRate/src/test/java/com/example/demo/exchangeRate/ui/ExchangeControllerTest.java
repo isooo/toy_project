@@ -32,6 +32,7 @@ public class ExchangeControllerTest {
                         .attribute("base",
                                 hasProperty("name", is("미국"))
                         )
-                );
+                )
+        ;
     }
 }

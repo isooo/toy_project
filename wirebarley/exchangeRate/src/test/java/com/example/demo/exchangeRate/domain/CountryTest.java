@@ -10,7 +10,7 @@ public class CountryTest {
         // given
 
         // when
-        Country country = Country.USA;
+        final Country country = Country.USA;
 
         // then
         assertThat(country.getCurrencyUnit()).isEqualTo("USD");

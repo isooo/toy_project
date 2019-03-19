@@ -30,8 +30,8 @@ public class ExchangeRestControllerTest {
                 ).andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("quotedCurrency").value("JPY")
-                ).andExpect(jsonPath("rate").isNumber()
-                );
+                ).andExpect(jsonPath("rate").isNumber())
+        ;
     }
 
     @Test
@@ -46,7 +46,7 @@ public class ExchangeRestControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("exchangeRate").hasJsonPath())
                 .andExpect(jsonPath("exchangeRate.quotedCurrency").value("PHP"))
-                .andExpect(jsonPath("amount.value").isNumber()
-                );
+                .andExpect(jsonPath("amount.value").isNumber())
+        ;
     }
 }

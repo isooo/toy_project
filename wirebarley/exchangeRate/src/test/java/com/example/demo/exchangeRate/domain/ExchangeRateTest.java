@@ -8,8 +8,8 @@ public class ExchangeRateTest {
     @Test
     public void 생성() {
         // given
-        Country base = Country.USA;
-        Country quoted = Country.KOR;
+        final Country base = Country.USA;
+        final Country quoted = Country.KOR;
         double rate = 1000.01;
 
         // when
