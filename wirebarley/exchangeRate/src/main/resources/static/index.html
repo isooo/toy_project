@@ -13,8 +13,13 @@
 <div class="col-md-12">
     <h1>환율 계산</h1>
     <div>
-        송금국가 : {{base.name}}({{base.currencyUnit}})
-        <input type="hidden" id="base" value="{{base.value}}">
+        송금국가 :
+        <select name="base" id="base">
+            <option value="">국가를 선택해주세요</option>
+            {{#base}}
+            <option value="{{value}}">{{name}}({{currencyUnit}})</option>
+            {{/base}}
+        </select>
     </div>
     <div>
         수취국가 :
@@ -29,7 +34,7 @@
         환율 : <span id="rate"></span>
     </div>
     <div>
-        송금액 : <input type="text" id="remittance" name="remittance"/> {{base.currencyUnit}}
+        송금액 : <input type="text" id="remittance" name="remittance"/> <span id="baseUnit"></span>
     </div>
     <div class="submit-button" style="margin: 5px 0px;">
         <button class="btn btn-primary" type="button" id="submitBtn" name="submitBtn" disabled="true">

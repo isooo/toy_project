@@ -1,19 +1,21 @@
 $().ready(function () {
+    $('#base').change(changedQuotes);
     $('#quotes').change(changedQuotes);
     $('#submitBtn').click(clickedSubmitButton);
 });
 
 function changedQuotes() {
     const param = {
-        base: $('#base').val(),
+        base: $('#base option:selected').val(),
         quotes: $('#quotes option:selected').val()
     }
 
-    if (param.quotes === "") {
+    if (param.base === "" || param.quotes === "") {
         $('#submitBtn').prop('disabled', true);
         $('#rate').text('');
         return false;
     }
+
 
     $.ajax({
         url: '/rate?' + $.param(param),
@@ -23,6 +25,7 @@ function changedQuotes() {
             const rate = numberWithCommas(data.rate);
             const currency = data.quotedCurrency + '/' + data.baseCurrency;
             $('#rate').text(rate + ' ' + currency);
+            $('#baseUnit').text(data.baseCurrency);
         }
     })
 }
@@ -30,7 +33,7 @@ function changedQuotes() {
 
 function clickedSubmitButton() {
     const param = {
-        base: $('#base').val(),
+        base: $('#base option:selected').val(),
         quotes: $('#quotes option:selected').val(),
         remittance: $('#remittance').val()
     }
