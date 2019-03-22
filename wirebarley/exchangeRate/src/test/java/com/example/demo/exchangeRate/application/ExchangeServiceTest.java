@@ -38,6 +38,21 @@ public class ExchangeServiceTest {
     }
 
     @Test
+    public void 송금국이_미국이_아닐떄_환율_정보_구하기() {
+        // given
+        given(exchangeApi.getExchangeRate(any(), any()))
+                .willReturn(Optional.of(new ExchangeRate(any(), any(), 100)))
+                ;
+
+        // when
+        final ExchangeRate exchangeRate = exchangeService.getRateInfo("KOR", "JPN");
+
+        // then
+        assertThat(exchangeRate.getRate()).isInstanceOf(Double.class);
+        assertThat(exchangeRate.getRate()).isGreaterThan(0);
+    }
+
+    @Test
     public void 수취_금액_구하기() {
         // given
         final double rate = 100;
