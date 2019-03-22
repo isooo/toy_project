@@ -43,7 +43,7 @@ public class ExchangeService {
             final Country baseCountry,
             final Country quotesCountry
     ) {
-        if (baseCountry.getValue() != "USA") {
+        if (baseCountry != Country.USA) {
             return twoWayQuotation(baseCountry, quotesCountry);
         }
         return exchangeApi.getExchangeRate(baseCountry, quotesCountry)
@@ -55,24 +55,19 @@ public class ExchangeService {
             final Country baseCountry,
             final Country quotesCountry
     ) {
-        double resultRate;
-        double baseRate;
-        double quotesRate;
-        if (quotesCountry.getValue() == "USA") {
-            baseRate = getRate(quotesCountry, baseCountry);
-            quotesRate = 1;
-        } else {
-            baseRate = getRate(Country.USA, baseCountry);
-            quotesRate = getRate(Country.USA, quotesCountry);
-        }
-        resultRate = new BigDecimal(quotesRate)
+        final double baseRate = getRate(Country.USA, baseCountry);
+        final double quotesRate = getRate(Country.USA, quotesCountry);
+        final double resultRate = new BigDecimal(quotesRate)
                 .divide(new BigDecimal(baseRate), 8, BigDecimal.ROUND_HALF_UP)
                 .doubleValue()
-        ;
+                ;
         return Optional.of(new ExchangeRate(baseCountry, quotesCountry, resultRate)).orElseGet(null);
     }
 
-    private double getRate(Country a, Country b) {
+    private double getRate(final Country a, final Country b) {
+        if (a == b) {
+            return 1;
+        }
         return exchangeApi
                 .getExchangeRate(a, b)
                 .get()
