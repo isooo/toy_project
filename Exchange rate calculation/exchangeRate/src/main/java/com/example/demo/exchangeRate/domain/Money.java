@@ -1,7 +1,7 @@
 package com.example.demo.exchangeRate.domain;
 
 public class Money {
-    private final double value;
+     private final double value;
 
     public Money(final double value) {
         if (value < 0) {
