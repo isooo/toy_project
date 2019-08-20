@@ -1,4 +1,4 @@
-package java.isooo.bot;
+package me.isooo.bot;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
