@@ -1,4 +1,4 @@
-package java.isooo.bot;
+package me.isooo.bot;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
