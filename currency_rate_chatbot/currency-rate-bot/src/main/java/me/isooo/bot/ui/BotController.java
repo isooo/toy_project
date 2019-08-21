@@ -38,7 +38,7 @@ public class BotController {
     public void handleStickerMessageEvent(MessageEvent<StickerMessageContent> event) {
         log.info("event: {}", event);
         final String userId = event.getSource().getUserId();
-        final List<Message> messages = botService.handleTextContent(botService.HELP_TEXT);
+        final List<Message> messages = botService.handleTextContent(BotService.HELP_TEXT);
         reply(event.getReplyToken(), messages);
     }
 
