@@ -1,4 +1,4 @@
-package me.isooo.bot;
+package me.isooo.bot.ui;
 
 import com.linecorp.bot.client.*;
 import com.linecorp.bot.model.*;
@@ -9,31 +9,37 @@ import com.linecorp.bot.model.response.*;
 import com.linecorp.bot.spring.boot.annotation.*;
 import lombok.*;
 import lombok.extern.slf4j.*;
+import me.isooo.bot.application.*;
 
 import java.util.*;
 import java.util.concurrent.*;
 
 @Slf4j
 @LineMessageHandler
-public class HelloController {
-    private LineMessagingClient lineMessagingClient;
+public class BotController {
+    private final LineMessagingClient lineMessagingClient;
+    private final BotService botService;
 
-    public HelloController(LineMessagingClient lineMessagingClient) {
+    public BotController(LineMessagingClient lineMessagingClient, BotService botService) {
         this.lineMessagingClient = lineMessagingClient;
+        this.botService = botService;
     }
 
     @EventMapping
     public void handleTextMessageEvent(MessageEvent<TextMessageContent> event) {
         log.info("event: {}", event);
-        final String replyToken = event.getReplyToken();
-        reply(replyToken, Collections.singletonList(new TextMessage("hello")));
+        final String userMessage = event.getMessage().getText().toUpperCase();
+        final String userId = event.getSource().getUserId();
+        List<Message> messages = botService.handleTextContent(userId, userMessage);
+        reply(event.getReplyToken(), messages);
     }
 
     @EventMapping
     public void handleStickerMessageEvent(MessageEvent<StickerMessageContent> event) {
         log.info("event: {}", event);
-        final String replyToken = event.getReplyToken();
-        reply(replyToken, Collections.singletonList(new TextMessage("hello")));
+        final String userId = event.getSource().getUserId();
+        List<Message> messages = botService.handleTextContent(userId, botService.HELP_TEXT);
+        reply(event.getReplyToken(), messages);
     }
 
     @EventMapping
