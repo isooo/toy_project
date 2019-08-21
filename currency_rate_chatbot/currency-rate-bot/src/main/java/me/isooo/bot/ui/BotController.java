@@ -30,7 +30,7 @@ public class BotController {
         log.info("event: {}", event);
         final String userMessage = event.getMessage().getText().toUpperCase();
         final String userId = event.getSource().getUserId();
-        List<Message> messages = botService.handleTextContent(userId, userMessage);
+        final List<Message> messages = botService.handleTextContent(userMessage);
         reply(event.getReplyToken(), messages);
     }
 
@@ -38,7 +38,7 @@ public class BotController {
     public void handleStickerMessageEvent(MessageEvent<StickerMessageContent> event) {
         log.info("event: {}", event);
         final String userId = event.getSource().getUserId();
-        List<Message> messages = botService.handleTextContent(userId, botService.HELP_TEXT);
+        final List<Message> messages = botService.handleTextContent(botService.HELP_TEXT);
         reply(event.getReplyToken(), messages);
     }
 
@@ -54,6 +54,7 @@ public class BotController {
                     .get();
             log.info("Sent messages: {}", apiResponse);
         } catch (InterruptedException | ExecutionException e) {
+            log.error("reply: {}", e);
             throw new RuntimeException(e);
         }
     }
