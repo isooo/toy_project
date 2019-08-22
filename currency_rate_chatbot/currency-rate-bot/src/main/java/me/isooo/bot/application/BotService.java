@@ -46,9 +46,10 @@ public class BotService {
         }
 
         if (Currency.isCurrency(userMessage)) {
-            final Optional<UserMessage> latestUserMessage = userMessageRepository.findFirstByUserIdOrderByIdDesc(userId);
+            final UserMessage latestUserMessage = userMessageRepository.findFirstByUserIdOrderByIdDesc(userId).orElse(null);
+            log.info("latestUserMessage: {}", latestUserMessage);
             final StringBuilder stringBuilder = new StringBuilder();
-            if (StringUtils.isEmpty(latestUserMessage) || !Currency.isCurrency(latestUserMessage.get().getMessage())) {
+            if (StringUtils.isEmpty(latestUserMessage) || !Currency.isCurrency(latestUserMessage.getMessage())) {
                 stringBuilder.append("상대 통화 선택하기\n(" + userMessage + " → ???)\n");
                 Arrays.stream(Currency.values())
                         .map(c -> c.name())
@@ -58,7 +59,7 @@ public class BotService {
                 return Collections.singletonList(textMessage);
             }
 
-            final Currency baseCurrency = Currency.valueOf(latestUserMessage.get().getMessage());
+            final Currency baseCurrency = Currency.valueOf(latestUserMessage.getMessage());
             final Currency counterCurrency = Currency.valueOf(userMessage);
 
             stringBuilder.append(baseCurrency.name() + "/" + counterCurrency.name() + "의 환율 : ");
