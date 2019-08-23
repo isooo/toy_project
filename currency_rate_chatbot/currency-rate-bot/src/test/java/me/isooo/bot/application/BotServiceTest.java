@@ -1,6 +1,7 @@
 package me.isooo.bot.application;
 
 import com.linecorp.bot.model.message.*;
+import me.isooo.bot.application.menu.*;
 import me.isooo.bot.domain.usermessage.*;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.*;
@@ -26,7 +27,7 @@ class BotServiceTest {
     void helpGuideText() {
         // given
         final String userId = "test001";
-        final String userMessage = "HELP";
+        final String userMessage = "help";
 
         // when
         final List<Message> messages = service.handleTextContent(userId, userMessage);
@@ -34,7 +35,7 @@ class BotServiceTest {
         final String text = message.getText();
 
         // then
-        assertThat(text).isEqualTo(BotService.HELP_MESSAGE);
+        assertThat(text).isEqualTo(GuideMenu.HELP_MESSAGE);
     }
 
     @DisplayName("시작이 입력되었을 때, 기준 통화 목록이 응답되는지 테스트")
@@ -84,5 +85,22 @@ class BotServiceTest {
 
         // then
         assertThat(text.split("\n")[0]).isEqualTo("KRW/USD의 환율 : 1000.1929");
+    }
+
+    @DisplayName("제공되지 않는 통화 입력 시 예외 메시지 테스트")
+    @Test
+    void unAllowableCurrencyHandle() {
+        // given
+        final String userId = "test001";
+        final String userMessage = "AAA";
+        this.userMessageRepository.save(new UserMessage(userId, "KRW"));
+
+        // when
+        final List<Message> messages = service.handleTextContent(userId, userMessage);
+        final TextMessage message = (TextMessage) messages.get(0);
+        final String text = message.getText();
+
+        // then
+        assertThat(text).isEqualTo("통화를 다시 한 번 확인해주세요 :)");
     }
 }
