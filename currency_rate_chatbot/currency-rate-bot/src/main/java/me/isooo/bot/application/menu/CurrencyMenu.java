@@ -29,14 +29,15 @@ public class CurrencyMenu implements Menu {
 
     @Override
     public List<Message> getMessages(String userId, String userMessage) {
-        // TODO : 제공되는 통화가 아닐 경우 걸러내기
-        // TODO : 기준 통화 선택인지 체크
-        // TODO : 상대 통화 선택인지 체크
-
         final UserMessage latestUserMessage = userMessageRepository.findFirstByUserIdOrderByIdDesc(userId).orElse(null);
         log.info("latestUserMessage: {}", latestUserMessage);
+
+        if (!Currency.isCurrency(userMessage)) {
+            return new ExceptionMenu().getMessages();
+        }
+
         final StringBuilder stringBuilder = new StringBuilder();
-        if (StringUtils.isEmpty(latestUserMessage) || !me.isooo.bot.domain.currency.Currency.isCurrency(latestUserMessage.getMessage())) {
+        if (StringUtils.isEmpty(latestUserMessage) || !Currency.isCurrency(latestUserMessage.getMessage())) {
             stringBuilder.append("상대 통화 선택하기\n(" + userMessage + " → ???)\n");
             Arrays.stream(me.isooo.bot.domain.currency.Currency.values())
                     .map(c -> c.name())
