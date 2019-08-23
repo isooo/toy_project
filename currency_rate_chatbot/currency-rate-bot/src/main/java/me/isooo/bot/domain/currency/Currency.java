@@ -1,4 +1,4 @@
-package me.isooo.bot.domain;
+package me.isooo.bot.domain.currency;
 
 import lombok.*;
 
