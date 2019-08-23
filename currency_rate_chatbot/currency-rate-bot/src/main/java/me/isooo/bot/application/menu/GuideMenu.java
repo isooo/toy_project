@@ -12,7 +12,11 @@ public class GuideMenu implements Menu {
 
     @Override
     public List<Message> getMessages(String userId, String userMessage) {
+        final List<Message> messages = new ArrayList<>();
+        final StickerMessage stickerMessage = new StickerMessage("1", "2");
         final TextMessage textMessage = new TextMessage(HELP_MESSAGE);
-        return Collections.singletonList(textMessage);
+        messages.add(stickerMessage);
+        messages.add(textMessage);
+        return Collections.unmodifiableList(messages);
     }
 }
