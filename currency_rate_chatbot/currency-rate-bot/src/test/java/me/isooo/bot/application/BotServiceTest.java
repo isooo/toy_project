@@ -31,7 +31,7 @@ class BotServiceTest {
 
         // when
         final List<Message> messages = service.handleTextContent(userId, userMessage);
-        final TextMessage message = (TextMessage) messages.get(0);
+        final TextMessage message = (TextMessage) messages.get(1);
         final String text = message.getText();
 
         // then

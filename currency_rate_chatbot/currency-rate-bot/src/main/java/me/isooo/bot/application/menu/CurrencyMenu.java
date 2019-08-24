@@ -29,12 +29,12 @@ public class CurrencyMenu implements Menu {
 
     @Override
     public List<Message> getMessages(String userId, String userMessage) {
-        final UserMessage latestUserMessage = userMessageRepository.findFirstByUserIdOrderByIdDesc(userId).orElse(null);
-        log.info("latestUserMessage: {}", latestUserMessage);
-
         if (!Currency.isCurrency(userMessage)) {
             return new ExceptionMenu().getMessages();
         }
+
+        final UserMessage latestUserMessage = userMessageRepository.findFirstByUserIdOrderByIdDesc(userId).orElse(null);
+        log.info("latestUserMessage: {}", latestUserMessage);
 
         final StringBuilder stringBuilder = new StringBuilder();
         if (StringUtils.isEmpty(latestUserMessage) || !Currency.isCurrency(latestUserMessage.getMessage())) {
