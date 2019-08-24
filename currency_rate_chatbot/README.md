@@ -13,6 +13,7 @@
 - OpenJDK 1.8.0_222
 - Gradle 5.4.1
 - Lombok 1.18.8
+- H2 1.4.199
 
 ## API
 - [LINE Messaging API](https://developers.line.biz/en/docs/messaging-api/overview/)
