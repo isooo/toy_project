@@ -10,6 +10,7 @@ import com.linecorp.bot.spring.boot.annotation.*;
 import lombok.*;
 import lombok.extern.slf4j.*;
 import me.isooo.bot.application.*;
+import me.isooo.bot.application.menu.*;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -30,7 +31,7 @@ public class BotController {
         log.info("event: {}", event);
         final String userMessage = event.getMessage().getText().toUpperCase();
         final String userId = event.getSource().getUserId();
-        final List<Message> messages = botService.handleTextContent(userMessage);
+        final List<Message> messages = botService.handleTextContent(userId, userMessage);
         reply(event.getReplyToken(), messages);
     }
 
@@ -38,7 +39,7 @@ public class BotController {
     public void handleStickerMessageEvent(MessageEvent<StickerMessageContent> event) {
         log.info("event: {}", event);
         final String userId = event.getSource().getUserId();
-        final List<Message> messages = botService.handleTextContent(BotService.HELP_TEXT);
+        final List<Message> messages = botService.handleTextContent(userId, GuideMenu.HELP_TEXT);
         reply(event.getReplyToken(), messages);
     }
 
