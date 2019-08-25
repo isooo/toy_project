@@ -1,10 +1,12 @@
 package me.isooo.bot.application.menu;
 
 import com.linecorp.bot.model.message.*;
+import lombok.extern.slf4j.*;
 import org.springframework.stereotype.*;
 
 import java.util.*;
 
+@Slf4j
 @Component
 public class GuideMenu implements Menu {
     public final static String HELP_TEXT = "HELP";
@@ -12,6 +14,7 @@ public class GuideMenu implements Menu {
 
     @Override
     public List<Message> getMessages(String userId, String userMessage) {
+        log.info("userId: {}, userMessage: {}", userId, userMessage);
         final List<Message> messages = new ArrayList<>();
         final StickerMessage stickerMessage = new StickerMessage("1", "2");
         final TextMessage textMessage = new TextMessage(HELP_MESSAGE);

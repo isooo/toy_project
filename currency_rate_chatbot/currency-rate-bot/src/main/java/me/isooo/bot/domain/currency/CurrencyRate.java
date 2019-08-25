@@ -1,10 +1,7 @@
 package me.isooo.bot.domain.currency;
 
 import lombok.*;
-import org.hibernate.annotations.*;
 
-import javax.persistence.*;
-import javax.persistence.Entity;
 import java.math.*;
 import java.time.*;
 

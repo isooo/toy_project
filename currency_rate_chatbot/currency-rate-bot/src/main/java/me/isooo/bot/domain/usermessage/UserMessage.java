@@ -15,8 +15,12 @@ public class UserMessage {
     private String userId;
     private String message;
 
-    public UserMessage(String userId, String message) {
+    @Enumerated(value = EnumType.STRING)
+    private MessageType messageType;
+
+    public UserMessage(String userId, String userMessage) {
         this.userId = userId;
-        this.message = message;
+        this.message = userMessage;
+        this.messageType = MessageType.getType(userMessage);
     }
 }
