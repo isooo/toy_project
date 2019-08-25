@@ -21,4 +21,8 @@ public class CurrencyRate {
         this.counter = counter;
         this.createdTime = LocalDateTime.now();
     }
+
+    public BigDecimal calculateAmount(BigDecimal money) {
+        return money.multiply(this.rate);
+    }
 }

@@ -4,7 +4,6 @@ import com.linecorp.bot.model.action.*;
 import com.linecorp.bot.model.message.*;
 import com.linecorp.bot.model.message.quickreply.*;
 import lombok.extern.slf4j.*;
-import me.isooo.bot.domain.currency.Currency;
 import me.isooo.bot.domain.currency.*;
 import me.isooo.bot.support.utils.*;
 import org.springframework.stereotype.*;
@@ -14,9 +13,6 @@ import java.util.*;
 @Slf4j
 @Component
 public class CurrencyMenu implements Menu {
-    private static final String BASE = "base";
-    private static final String COUNTER = "counter";
-
     @Override
     public List<Message> getMessages(String userId, String userMessage) {
         log.info("userId: {}, userMessage: {}", userId, userMessage);
@@ -34,7 +30,7 @@ public class CurrencyMenu implements Menu {
     }
 
     private TextMessage getCurrencyRateMessage(String userMessage) {
-        final CurrencyRate currencyRate = convert(userMessage);
+        final CurrencyRate currencyRate = CurrencyUtils.convert(userMessage);
         final TextMessage textMessage = new TextMessage(
                 // TODO : #12 업데이트 시간 표기
                 CurrencyUtils.currencyRateTextMessageFormatting(currencyRate)
@@ -54,21 +50,5 @@ public class CurrencyMenu implements Menu {
                                 )
                         )
                 ).build();
-    }
-
-    private CurrencyRate convert(final String text) {
-        final Map<String, Currency> currencyPair = extractCurrencyPair(text);
-        final Currency base = currencyPair.get(BASE);
-        final Currency counter = currencyPair.get(COUNTER);
-        return new CurrencyRate(base, counter);
-    }
-
-    private static Map<String, Currency> extractCurrencyPair(final String text) {
-        final Map<String, Currency> map = new HashMap<>();
-        final Currency base = Currency.valueOf(text.substring(0, 3));
-        final Currency counter = Currency.valueOf(text.substring(3));
-        map.put(BASE, base);
-        map.put(COUNTER, counter);
-        return map;
     }
 }

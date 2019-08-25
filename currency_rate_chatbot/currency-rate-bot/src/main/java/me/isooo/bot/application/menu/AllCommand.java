@@ -7,17 +7,20 @@ public class AllCommand {
     private final StartMenu startMenu;
     private final CurrencyMenu currencyMenu;
     private final AmountMenu amountMenu;
+    private final AmountResultMenu amountResultMenu;
     private final GuideMenu guideMenu;
 
     public AllCommand(
             StartMenu startMenu,
             CurrencyMenu currencyMenu,
             AmountMenu amountMenu,
+            AmountResultMenu amountResultMenu,
             GuideMenu guideMenu
     ) {
         this.startMenu = startMenu;
         this.currencyMenu = currencyMenu;
         this.amountMenu = amountMenu;
+        this.amountResultMenu = amountResultMenu;
         this.guideMenu = guideMenu;
     }
 
@@ -30,6 +33,9 @@ public class AllCommand {
         }
         if (amountMenu.matches(userMessage)) {
             return this.amountMenu;
+        }
+        if (amountResultMenu.matches(userMessage)) {
+            return this.amountResultMenu;
         }
         return this.guideMenu;
     }
