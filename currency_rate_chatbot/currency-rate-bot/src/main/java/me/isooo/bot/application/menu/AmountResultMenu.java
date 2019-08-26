@@ -1,13 +1,14 @@
 package me.isooo.bot.application.menu;
 
+import com.linecorp.bot.model.action.*;
 import com.linecorp.bot.model.message.*;
+import com.linecorp.bot.model.message.quickreply.*;
 import lombok.extern.slf4j.*;
 import me.isooo.bot.domain.currency.*;
 import me.isooo.bot.domain.usermessage.*;
 import me.isooo.bot.support.utils.*;
 import org.springframework.stereotype.*;
 
-import java.math.*;
 import java.util.*;
 
 @Slf4j
@@ -38,9 +39,21 @@ public class AmountResultMenu implements Menu {
     }
 
     private TextMessage getAmountResultMessage(String userMessage, CurrencyRate currencyRate) {
-        return new TextMessage(
+        final TextMessage textMessage = new TextMessage(
                 CurrencyUtils.amountResultTextMessageFormatting(userMessage, currencyRate)
         );
+
+        return textMessage
+                .toBuilder()
+                .quickReply(
+                        QuickReply.items(
+                                Collections.singletonList(
+                                        QuickReplyItem.builder()
+                                                .action(new MessageAction("처음으로 돌아가기", StartMenu.Command))
+                                                .build()
+                                )
+                        )
+                ).build();
     }
 
     public boolean matches(String userMessage) {
