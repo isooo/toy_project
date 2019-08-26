@@ -38,13 +38,8 @@ public class AmountResultMenu implements Menu {
     }
 
     private TextMessage getAmountResultMessage(String userMessage, CurrencyRate currencyRate) {
-        final String formalizedAmount = CurrencyUtils.getFormalizedFigures(currencyRate.calculateAmount(new BigDecimal(userMessage)));
-        return new TextMessage(userMessage
-                + currencyRate.getBase().getUnit()
-                + " → "
-                + formalizedAmount
-                + currencyRate.getCounter().getUnit()
-                + "입니다."
+        return new TextMessage(
+                CurrencyUtils.amountResultTextMessageFormatting(userMessage, currencyRate)
         );
     }
 

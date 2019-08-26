@@ -11,6 +11,7 @@ import java.util.*;
 import java.util.regex.*;
 
 public class CurrencyUtils {
+    private static final int DEFAULT_CURRENCY_UNIT = 1;
     private static final Pattern CURRENCY_RATE_PATTERN = Pattern.compile("^([A-Z]{6})$");
     private static final Pattern AMOUNT_PATTERN = Pattern.compile("^[0-9]+(?:[.][0-9]+)?$");
     private static final Pattern ALLOWABLE_AMOUNT_PATTERN = Pattern.compile("(^[0-9]{1,8}$)|(^[0-9]{1,6}[.][0-9]{1,2}$)");
@@ -27,15 +28,29 @@ public class CurrencyUtils {
     }
 
     public static String currencyRateTextMessageFormatting(CurrencyRate currencyRate) {
-        return currencyRate.getBase()
-                + "/"
-                + currencyRate.getCounter()
-                + "의 환율 : "
-                + currencyRate.getRate()
-                + "\n\n"
-                + "※ 기준 시각\n"
-                + getDefaultFormalizedTimeMessage(currencyRate.getCreatedTime());
+        final String formalizedRate = getFormalizedFigures(currencyRate.getRate());
+        return String.format("%d%s → %s%s입니다.\n\n※ 기준 시각\n%s",
+                DEFAULT_CURRENCY_UNIT,
+                currencyRate.getBaseUnit(),
+                formalizedRate,
+                currencyRate.getCounterUnit(),
+                getDefaultFormalizedTimeMessage(currencyRate.getCreatedTime())
+        );
     }
+
+    public static String amountResultTextMessageFormatting(String userMessage, CurrencyRate currencyRate) {
+        final String formalizedUserMessage = getFormalizedFigures(new BigDecimal(userMessage));
+        final String formalizedAmountResult = getFormalizedFigures(currencyRate.calculateAmount(new BigDecimal(userMessage)));
+        return String.format("%s%s → %s%s입니다.\n\n※ 기준 시각\n%s",
+                formalizedUserMessage,
+                currencyRate.getBaseUnit(),
+                formalizedAmountResult,
+                currencyRate.getCounterUnit(),
+                getDefaultFormalizedTimeMessage(currencyRate.getCreatedTime())
+        );
+    }
+
+
 
     private static String getDefaultFormalizedTimeMessage(final LocalDateTime localDateTime) {
         return localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));

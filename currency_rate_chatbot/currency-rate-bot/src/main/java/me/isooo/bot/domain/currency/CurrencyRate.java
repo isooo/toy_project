@@ -25,4 +25,11 @@ public class CurrencyRate {
     public BigDecimal calculateAmount(BigDecimal money) {
         return money.multiply(this.rate);
     }
+    public String getBaseUnit() {
+        return base.getUnit();
+    }
+
+    public String getCounterUnit() {
+        return counter.getUnit();
+    }
 }
