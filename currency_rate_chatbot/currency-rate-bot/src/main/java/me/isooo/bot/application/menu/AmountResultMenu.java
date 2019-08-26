@@ -24,15 +24,15 @@ public class AmountResultMenu implements Menu {
         log.info("userId: {}, userMessage: {}", userId, userMessage);
         // TODO : #13 허용 가능한 포멧인지 체크 (CurrencyUtils.isAllowableAmountPattern())
 
-        final UserMessage userCurrencyPair = userMessageRepository.findFirstByUserIdAndMessageTypeOrderByIdDesc(userId, MessageType.CURRENCY_PAIR).get();
-        log.info("userCurrencyPair: {}", userCurrencyPair);
         try {
+            final UserMessage userCurrencyPair = userMessageRepository.findFirstByUserIdAndMessageTypeOrderByIdDesc(userId, MessageType.CURRENCY_PAIR).get();
+            log.info("userCurrencyPair: {}", userCurrencyPair);
             final String userCurrencyPairMessage = userCurrencyPair.getMessage();
             final CurrencyRate currencyRate = CurrencyUtils.convert(userCurrencyPairMessage);
             final TextMessage textMessage = getAmountResultMessage(userMessage, currencyRate);
             return Collections.singletonList(textMessage);
         } catch (IllegalArgumentException e) {
-            log.info("[IllegalArgumentException] Currency pair does not exist, userMessage : {}, userCurrencyPair : {}", userMessage, userCurrencyPair);
+            log.error("[IllegalArgumentException]", e);
             return Collections.unmodifiableList(ExceptionMenu.currencyPairEmpty(userId, userMessage));
         }
     }

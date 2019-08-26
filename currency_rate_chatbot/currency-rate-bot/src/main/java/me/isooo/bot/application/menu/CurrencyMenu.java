@@ -20,7 +20,7 @@ public class CurrencyMenu implements Menu {
             final TextMessage textMessage = getCurrencyRateMessage(userMessage);
             return Collections.singletonList(textMessage);
         } catch (IllegalArgumentException e) {
-            log.info("[IllegalArgumentException] invalid currency, userMessage : {}", userMessage);
+            log.error("[IllegalArgumentException]", e);
             return Collections.unmodifiableList(ExceptionMenu.unallowableCurrency(userId, userMessage));
         }
     }

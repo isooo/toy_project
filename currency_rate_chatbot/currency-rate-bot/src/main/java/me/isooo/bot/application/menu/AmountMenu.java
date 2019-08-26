@@ -22,14 +22,17 @@ public class AmountMenu implements Menu {
     @Override
     public List<Message> getMessages(String userId, String userMessage) {
         log.info("userId: {}, userMessage: {}", userId, userMessage);
-        final UserMessage userCurrencyPair = userMessageRepository.findFirstByUserIdAndMessageTypeOrderByIdDesc(userId, MessageType.CURRENCY_PAIR).get();
-        log.info("userCurrencyPair: {}", userCurrencyPair);
         try {
+            final UserMessage userCurrencyPair = userMessageRepository.findFirstByUserIdAndMessageTypeOrderByIdDesc(userId, MessageType.CURRENCY_PAIR).get();
+            log.info("userCurrencyPair: {}", userCurrencyPair);
             final String userCurrencyPairMessage = userCurrencyPair.getMessage();
             final Currency base = Currency.valueOf(userCurrencyPairMessage.substring(0, 3));
             return Collections.singletonList(new TextMessage("환전할 금액(" + base.getUnit() + ")을 숫자로 입력해주세요."));
         } catch (IllegalArgumentException e) {
-            log.info("[IllegalArgumentException] Currency pair does not exist, userMessage : {}, userCurrencyPair : {}", userMessage, userCurrencyPair);
+            log.error("[IllegalArgumentException]", e);
+            return new StartMenu().getMessages(userId, userMessage);
+        } catch (NoSuchElementException e) {
+            log.error("[NoSuchElementException]", e);
             return Collections.unmodifiableList(ExceptionMenu.currencyPairEmpty(userId, userMessage));
         }
     }
