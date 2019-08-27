@@ -14,6 +14,11 @@ import java.util.*;
 @Component
 public class CurrencyMenu implements Menu {
     @Override
+    public boolean matches(String userMessage) {
+        return CurrencyUtils.isCurrencyRatePattern(userMessage);
+    }
+
+    @Override
     public List<Message> getMessages(String userId, String userMessage) {
         log.info("userId: {}, userMessage: {}", userId, userMessage);
         try {
@@ -23,10 +28,6 @@ public class CurrencyMenu implements Menu {
             log.error("[IllegalArgumentException]", e);
             return Collections.unmodifiableList(ExceptionMenu.unallowableCurrency(userId, userMessage));
         }
-    }
-
-    public boolean matches(String userMessage) {
-        return CurrencyUtils.isCurrencyRatePattern(userMessage);
     }
 
     private TextMessage getCurrencyRateMessage(String userMessage) {

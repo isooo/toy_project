@@ -13,6 +13,11 @@ public class GuideMenu implements Menu {
     public final static String HELP_MESSAGE = "[시작]을 입력하시면,\n환율 조회를 시작할 수 있어요 :)";
 
     @Override
+    public boolean matches(String userMessage) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public List<Message> getMessages(String userId, String userMessage) {
         log.info("userId: {}, userMessage: {}", userId, userMessage);
         final List<Message> messages = new ArrayList<>();

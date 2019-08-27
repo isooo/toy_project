@@ -20,6 +20,11 @@ public class AmountMenu implements Menu {
     }
 
     @Override
+    public boolean matches(String userMessage) {
+        return AmountMenu.Command.equals(userMessage);
+    }
+
+    @Override
     public List<Message> getMessages(String userId, String userMessage) {
         log.info("userId: {}, userMessage: {}", userId, userMessage);
         try {
@@ -35,9 +40,5 @@ public class AmountMenu implements Menu {
             log.error("[NoSuchElementException]", e);
             return Collections.unmodifiableList(ExceptionMenu.currencyPairEmpty(userId, userMessage));
         }
-    }
-
-    public boolean matches(String userMessage) {
-        return AmountMenu.Command.equals(userMessage);
     }
 }

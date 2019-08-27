@@ -21,6 +21,11 @@ public class AmountResultMenu implements Menu {
     }
 
     @Override
+    public boolean matches(String userMessage) {
+        return CurrencyUtils.isAmountPattern(userMessage);
+    }
+
+    @Override
     public List<Message> getMessages(String userId, String userMessage) {
         log.info("userId: {}, userMessage: {}", userId, userMessage);
         // TODO : #13 허용 가능한 포멧인지 체크 (CurrencyUtils.isAllowableAmountPattern())
@@ -54,9 +59,5 @@ public class AmountResultMenu implements Menu {
                                 )
                         )
                 ).build();
-    }
-
-    public boolean matches(String userMessage) {
-        return CurrencyUtils.isAmountPattern(userMessage);
     }
 }

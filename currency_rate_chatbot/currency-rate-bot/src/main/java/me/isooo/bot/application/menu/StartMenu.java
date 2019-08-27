@@ -13,6 +13,11 @@ public class StartMenu implements Menu {
     public static final String Command = "시작";
 
     @Override
+    public boolean matches(String userMessage) {
+        return StartMenu.Command.equals(userMessage);
+    }
+
+    @Override
     public List<Message> getMessages(String userId, String userMessage) {
         log.info("userId: {}, userMessage: {}", userId, userMessage);
         final List<Message> messages = new ArrayList<>();
@@ -27,9 +32,5 @@ public class StartMenu implements Menu {
         messages.add(textMessage1);
         messages.add(textMessage2);
         return Collections.unmodifiableList(messages);
-    }
-
-    public boolean matches(String userMessage) {
-        return StartMenu.Command.equals(userMessage);
     }
 }
