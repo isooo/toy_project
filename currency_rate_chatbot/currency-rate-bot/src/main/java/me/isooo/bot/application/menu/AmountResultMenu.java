@@ -5,6 +5,7 @@ import com.linecorp.bot.model.message.*;
 import com.linecorp.bot.model.message.quickreply.*;
 import lombok.extern.slf4j.*;
 import me.isooo.bot.domain.currency.*;
+import me.isooo.bot.domain.usermessage.*;
 import me.isooo.bot.support.utils.*;
 import org.springframework.stereotype.*;
 
@@ -12,41 +13,48 @@ import java.util.*;
 
 @Slf4j
 @Component
-public class CurrencyMenu implements Menu {
+public class AmountResultMenu implements Menu {
+    private final UserMessageRepository userMessageRepository;
+
+    public AmountResultMenu(UserMessageRepository userMessageRepository) {
+        this.userMessageRepository = userMessageRepository;
+    }
+
     @Override
     public boolean matches(String userMessage) {
-        return CurrencyUtils.isCurrencyRatePattern(userMessage);
+        return CurrencyUtils.isAmountPattern(userMessage);
     }
 
     @Override
     public List<Message> getMessages(String userId, String userMessage) {
         log.info("userId: {}, userMessage: {}", userId, userMessage);
+        // TODO : #13 허용 가능한 포멧인지 체크 (CurrencyUtils.isAllowableAmountPattern())
+
         try {
-            final TextMessage textMessage = getCurrencyRateMessage(userMessage);
+            final UserMessage userCurrencyPair = userMessageRepository.findFirstByUserIdAndMessageTypeOrderByIdDesc(userId, MessageType.CURRENCY_PAIR).get();
+            log.info("userCurrencyPair: {}", userCurrencyPair);
+            final String userCurrencyPairMessage = userCurrencyPair.getMessage();
+            final CurrencyRate currencyRate = CurrencyUtils.convert(userCurrencyPairMessage);
+            final TextMessage textMessage = getAmountResultMessage(userMessage, currencyRate);
             return Collections.singletonList(textMessage);
         } catch (IllegalArgumentException e) {
             log.error("[IllegalArgumentException]", e);
-            return Collections.unmodifiableList(ExceptionMenu.unallowableCurrency(userId, userMessage));
+            return Collections.unmodifiableList(ExceptionMenu.currencyPairEmpty(userId, userMessage));
         }
     }
 
-    private TextMessage getCurrencyRateMessage(String userMessage) {
-        final CurrencyRate currencyRate = CurrencyUtils.convert(userMessage);
+    private TextMessage getAmountResultMessage(String userMessage, CurrencyRate currencyRate) {
         final TextMessage textMessage = new TextMessage(
-                // TODO : #12 업데이트 시간 표기
-                CurrencyUtils.currencyRateTextMessageFormatting(currencyRate)
+                CurrencyUtils.amountResultTextMessageFormatting(userMessage, currencyRate)
         );
 
         return textMessage
                 .toBuilder()
                 .quickReply(
                         QuickReply.items(
-                                Arrays.asList(
+                                Collections.singletonList(
                                         QuickReplyItem.builder()
                                                 .action(new MessageAction("처음으로 돌아가기", StartMenu.Command))
-                                                .build(),
-                                        QuickReplyItem.builder()
-                                                .action(new MessageAction(AmountMenu.Command, AmountMenu.Command))
                                                 .build()
                                 )
                         )
