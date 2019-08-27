@@ -66,7 +66,7 @@ class BotServiceTest {
         final String text = message.getText();
 
         // then
-        assertThat(text.split("\n")[0]).isEqualTo("KRW/USD의 환율 : 1000.1929");
+        assertThat(text.split("\n")[0]).isEqualTo("1원 → 1,000.19달러입니다.");
     }
 
     @DisplayName("제공되지 않는 통화 쌍이 입력되었을 때, 예외 메시지 테스트")
@@ -128,7 +128,7 @@ class BotServiceTest {
         final String text = message.getText();
 
         // then
-        assertThat(text).isEqualTo("1000원 → 1,000,192.90달러입니다.");
+        assertThat(text.split("\n")[0]).isEqualTo("1,000.00원 → 1,000,192.90달러입니다.");
     }
 
     @DisplayName("올바른 환율 조회 없이 금액 입력 시, 예외 메시지 테스트")
