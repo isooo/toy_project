@@ -58,7 +58,7 @@ class BotServiceTest {
     @Test
     void currencyRateInfoText() {
         // given
-        final String userMessage = "KRWUSD";
+        final String userMessage = "USDUSD";
 
         // when
         final List<Message> messages = service.handleTextContent(userId, userMessage);
@@ -66,7 +66,7 @@ class BotServiceTest {
         final String text = message.getText();
 
         // then
-        assertThat(text.split("\n")[0]).isEqualTo("1원 → 1,000.19달러입니다.");
+        assertThat(text.split("\n")[0]).isEqualTo("1달러 → 1.00달러입니다.");
     }
 
     @DisplayName("제공되지 않는 통화 쌍이 입력되었을 때, 예외 메시지 테스트")
@@ -120,7 +120,8 @@ class BotServiceTest {
     void amountResultText() {
         // given
         final String userMessage = "1000";
-        this.userMessageRepository.save(new UserMessage(userId, "KRWUSD"));
+        this.userMessageRepository.save(new UserMessage(userId, "KRWKRW"));
+
 
         // when
         final List<Message> messages = service.handleTextContent(userId, userMessage);
@@ -128,7 +129,7 @@ class BotServiceTest {
         final String text = message.getText();
 
         // then
-        assertThat(text.split("\n")[0]).isEqualTo("1,000.00원 → 1,000,192.90달러입니다.");
+        assertThat(text.split("\n")[0]).isEqualTo("1,000.00원 → 1,000.00원입니다.");
     }
 
     @DisplayName("올바른 환율 조회 없이 금액 입력 시, 예외 메시지 테스트")
