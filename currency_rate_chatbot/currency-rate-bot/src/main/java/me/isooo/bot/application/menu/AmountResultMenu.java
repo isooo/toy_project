@@ -4,6 +4,7 @@ import com.linecorp.bot.model.action.*;
 import com.linecorp.bot.model.message.*;
 import com.linecorp.bot.model.message.quickreply.*;
 import lombok.extern.slf4j.*;
+import me.isooo.bot.application.*;
 import me.isooo.bot.domain.currency.*;
 import me.isooo.bot.domain.usermessage.*;
 import me.isooo.bot.support.utils.*;
@@ -14,9 +15,11 @@ import java.util.*;
 @Slf4j
 @Component
 public class AmountResultMenu implements Menu {
+    private final CurrencyRateConverter converter;
     private final UserMessageRepository userMessageRepository;
 
-    public AmountResultMenu(UserMessageRepository userMessageRepository) {
+    public AmountResultMenu(CurrencyRateConverter converter, UserMessageRepository userMessageRepository) {
+        this.converter = converter;
         this.userMessageRepository = userMessageRepository;
     }
 
@@ -34,7 +37,7 @@ public class AmountResultMenu implements Menu {
             final UserMessage userCurrencyPair = userMessageRepository.findFirstByUserIdAndMessageTypeOrderByIdDesc(userId, MessageType.CURRENCY_PAIR).get();
             log.info("userCurrencyPair: {}", userCurrencyPair);
             final String userCurrencyPairMessage = userCurrencyPair.getMessage();
-            final CurrencyRate currencyRate = CurrencyUtils.convert(userCurrencyPairMessage);
+            final CurrencyRate currencyRate = converter.convert(userCurrencyPairMessage);
             final TextMessage textMessage = getAmountResultMessage(userMessage, currencyRate);
             return Collections.singletonList(textMessage);
         } catch (IllegalArgumentException e) {

@@ -4,6 +4,7 @@ import com.linecorp.bot.model.action.*;
 import com.linecorp.bot.model.message.*;
 import com.linecorp.bot.model.message.quickreply.*;
 import lombok.extern.slf4j.*;
+import me.isooo.bot.application.*;
 import me.isooo.bot.domain.currency.*;
 import me.isooo.bot.support.utils.*;
 import org.springframework.stereotype.*;
@@ -13,6 +14,12 @@ import java.util.*;
 @Slf4j
 @Component
 public class CurrencyMenu implements Menu {
+    private final CurrencyRateConverter converter;
+
+    public CurrencyMenu(CurrencyRateConverter converter) {
+        this.converter = converter;
+    }
+
     @Override
     public boolean matches(String userMessage) {
         return CurrencyUtils.isCurrencyRatePattern(userMessage);
@@ -31,7 +38,7 @@ public class CurrencyMenu implements Menu {
     }
 
     private TextMessage getCurrencyRateMessage(String userMessage) {
-        final CurrencyRate currencyRate = CurrencyUtils.convert(userMessage);
+        final CurrencyRate currencyRate = converter.convert(userMessage);
         final TextMessage textMessage = new TextMessage(
                 // TODO : #12 업데이트 시간 표기
                 CurrencyUtils.currencyRateTextMessageFormatting(currencyRate)
