@@ -33,6 +33,10 @@ public class AmountResultMenu implements Menu {
         log.info("userId: {}, userMessage: {}", userId, userMessage);
         // TODO : #13 허용 가능한 포멧인지 체크 (CurrencyUtils.isAllowableAmountPattern())
 
+        if (!CurrencyUtils.isAllowableAmountPattern(userMessage)) {
+            return Collections.unmodifiableList(ExceptionMenu.unallowableAmountPattern(userId, userMessage));
+        }
+
         try {
             final UserMessage userCurrencyPair = userMessageRepository.findFirstByUserIdAndMessageTypeOrderByIdDesc(userId, MessageType.CURRENCY_PAIR).get();
             log.info("userCurrencyPair: {}", userCurrencyPair);

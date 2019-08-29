@@ -65,4 +65,8 @@ public class CurrencyUtils {
     private static boolean isOutOfDate(LocalDateTime localDateTime) {
         return localDateTime.isBefore(LocalDateTime.now().minusDays(1));
     }
+
+    public static boolean isAllowableAmountPattern(final String pattern) {
+        return ALLOWABLE_AMOUNT_PATTERN.matcher(pattern).matches();
+    }
 }
