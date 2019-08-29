@@ -31,20 +31,17 @@ public class AmountResultMenu implements Menu {
     @Override
     public List<Message> getMessages(String userId, String userMessage) {
         log.info("userId: {}, userMessage: {}", userId, userMessage);
-        // TODO : #13 허용 가능한 포멧인지 체크 (CurrencyUtils.isAllowableAmountPattern())
-
-        if (!CurrencyUtils.isAllowableAmountPattern(userMessage)) {
-            return Collections.unmodifiableList(ExceptionMenu.unallowableAmountPattern(userId, userMessage));
-        }
-
         try {
             final UserMessage userCurrencyPair = userMessageRepository.findFirstByUserIdAndMessageTypeOrderByIdDesc(userId, MessageType.CURRENCY_PAIR).get();
             log.info("userCurrencyPair: {}", userCurrencyPair);
             final String userCurrencyPairMessage = userCurrencyPair.getMessage();
+            if (!CurrencyUtils.isAllowableAmountPattern(userMessage)) {
+                return Collections.unmodifiableList(ExceptionMenu.unallowableAmountPattern(userId, userMessage));
+            }
             final CurrencyRate currencyRate = converter.convert(userCurrencyPairMessage);
             final TextMessage textMessage = getAmountResultMessage(userMessage, currencyRate);
             return Collections.singletonList(textMessage);
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | NoSuchElementException e) {
             log.error("[IllegalArgumentException]", e);
             return Collections.unmodifiableList(ExceptionMenu.currencyPairEmpty(userId, userMessage));
         }

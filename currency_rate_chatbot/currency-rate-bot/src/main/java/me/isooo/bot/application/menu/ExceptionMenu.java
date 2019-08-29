@@ -20,21 +20,19 @@ public class ExceptionMenu {
             "123456.789(x)";
 
     public static List<Message> unallowableCurrency(String userId, String userMessage) {
-        log.info("userId: {}, userMessage: {}", userId, userMessage);
         return getMessages(userId, userMessage, UNALLOWABLE_CURRENCY_MESSAGE);
     }
 
     public static List<Message> currencyPairEmpty(String userId, String userMessage) {
-        log.info("userId: {}, userMessage: {}", userId, userMessage);
         return getMessages(userId, userMessage, CURRENCY_PAIR_EMPTY_MESSAGE);
     }
 
     public static List<Message> unallowableAmountPattern(String userId, String userMessage) {
-        log.info("userId: {}, userMessage: {}", userId, userMessage);
         return getMessages(userId, userMessage, ALLOWABLE_AMOUNT_PATTERN_EXPLAIN);
     }
 
     private static List<Message> getMessages(String userId, String userMessage, String message) {
+        log.info("userId: {}, userMessage: {}, ExceptionMessage: {}", userId, userMessage, message);
         final List<Message> messages = new ArrayList<>();
         final TextMessage textMessage = new TextMessage(message);
         messages.add(textMessage);
