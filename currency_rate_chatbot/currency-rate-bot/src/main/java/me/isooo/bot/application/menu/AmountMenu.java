@@ -45,7 +45,7 @@ public class AmountMenu implements Menu {
             final Currency base = Currency.valueOf(userCurrencyPairMessage.substring(0, 3));
             final List<Message> messages = new ArrayList<>();
             messages.add(new TextMessage("환전할 금액(" + base.getUnit() + ")을 숫자로 입력해주세요."));
-            messages.add(new TextMessage("※ 숫자는 총 8자리까지 가능하며,\n소수점 이하는 2자리까지 지원합니다."));
+            messages.add(new TextMessage("▶ 숫자는 총 8자리까지 가능하며,\n소수점 이하는 2자리까지 지원합니다."));
             return Collections.unmodifiableList(messages);
         } catch (IllegalArgumentException e) {
             log.error("[IllegalArgumentException]", e);
