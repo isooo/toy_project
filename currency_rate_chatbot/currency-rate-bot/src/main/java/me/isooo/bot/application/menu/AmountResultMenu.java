@@ -59,7 +59,7 @@ public class AmountResultMenu implements Menu {
                         QuickReply.items(
                                 Collections.singletonList(
                                         QuickReplyItem.builder()
-                                                .action(new MessageAction("처음으로 돌아가기", StartMenu.Command))
+                                                .action(new MessageAction("처음으로 돌아가기", StartMenu.COMMAND))
                                                 .build()
                                 )
                         )

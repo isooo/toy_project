@@ -10,11 +10,22 @@ import java.util.*;
 @Slf4j
 @Component
 public class StartMenu implements Menu {
-    public static final String Command = "시작";
+    public static final String COMMAND = "시작";
+    private static List<String> CANDIDATES;
+
+    static {
+        CANDIDATES = Arrays.asList(
+                COMMAND,
+                "환율 조회",
+                "환율",
+                "환율 정보"
+        );
+    }
 
     @Override
     public boolean matches(String userMessage) {
-        return StartMenu.Command.equals(userMessage);
+        return CANDIDATES.stream()
+                .anyMatch(candidate -> candidate.equals(userMessage));
     }
 
     @Override
