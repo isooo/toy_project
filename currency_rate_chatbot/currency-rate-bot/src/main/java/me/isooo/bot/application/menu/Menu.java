@@ -7,5 +7,5 @@ import java.util.*;
 public interface Menu {
     boolean matches(String userMessage);
 
-    List<Message> getMessages(String userId, String userMessage);
+    List<Message> getMessages(String sessionId, String userMessage);
 }

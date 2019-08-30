@@ -6,14 +6,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("UserMessage 테스트")
 class UserMessageTest {
-    private final String userId = "test001";
+    private final String sessionId = "test001";
 
     @DisplayName("userMessage가 텍스트일 떄, MessageType 타입 테스트")
     @Test
     void messageTypeTextTest() {
         //given
         // when
-        final UserMessage userMessage = new UserMessage(userId, "시작");
+        final UserMessage userMessage = new UserMessage(sessionId, "시작");
 
         // then
         assertThat(userMessage.getMessageType()).isEqualTo(MessageType.TEXT);
@@ -24,7 +24,7 @@ class UserMessageTest {
     void messageTypeCurrencyPairTest() {
         //given
         // when
-        final UserMessage userMessage = new UserMessage(userId, "USDKRW");
+        final UserMessage userMessage = new UserMessage(sessionId, "USDKRW");
 
         // then
         assertThat(userMessage.getMessageType()).isEqualTo(MessageType.CURRENCY_PAIR);

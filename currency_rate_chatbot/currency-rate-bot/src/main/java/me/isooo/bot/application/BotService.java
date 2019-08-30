@@ -21,11 +21,11 @@ public class BotService {
     }
 
     @Transactional
-    public List<Message> handleTextContent(String userId, String userMessage) {
+    public List<Message> handleTextContent(String sessionId, String userMessage) {
         log.info("userMessage: {}", userMessage);
         final Menu menu = allCommand.getMenu(userMessage);
-        final List<Message> messages = menu.getMessages(userId, userMessage);
-        userMessageRepository.save(new UserMessage(userId, userMessage));
+        final List<Message> messages = menu.getMessages(sessionId, userMessage);
+        userMessageRepository.save(new UserMessage(sessionId, userMessage));
         return messages;
     }
 }
