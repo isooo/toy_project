@@ -37,7 +37,7 @@ public class AmountResultMenu implements Menu {
             log.info("userCurrencyPair: {}", userCurrencyPair);
             final String userCurrencyPairMessage = userCurrencyPair.getMessage();
             if (!CurrencyUtils.isAllowableAmountPattern(userMessage)) {
-                return Collections.unmodifiableList(ExceptionMenu.unallowableAmountPattern(sessionId, userMessage));
+                return Collections.singletonList(ExceptionMenu.unallowableAmountPattern());
             }
             final CurrencyRate currencyRate = converter.convert(userCurrencyPairMessage);
             final TextMessage textMessage = getAmountResultMessage(userMessage, currencyRate);
