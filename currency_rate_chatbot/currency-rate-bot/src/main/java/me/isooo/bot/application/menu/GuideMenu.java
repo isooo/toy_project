@@ -18,8 +18,8 @@ public class GuideMenu implements Menu {
     }
 
     @Override
-    public List<Message> getMessages(String userId, String userMessage) {
-        log.info("userId: {}, userMessage: {}", userId, userMessage);
+    public List<Message> getMessages(String sessionId, String userMessage) {
+        log.info("userId: {}, userMessage: {}", sessionId, userMessage);
         final List<Message> messages = new ArrayList<>();
         final StickerMessage stickerMessage = new StickerMessage("1", "2");
         final TextMessage textMessage = new TextMessage(HELP_MESSAGE);

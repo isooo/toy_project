@@ -18,8 +18,8 @@ public class StartMenu implements Menu {
     }
 
     @Override
-    public List<Message> getMessages(String userId, String userMessage) {
-        log.info("userId: {}, userMessage: {}", userId, userMessage);
+    public List<Message> getMessages(String sessionId, String userMessage) {
+        log.info("userId: {}, userMessage: {}", sessionId, userMessage);
         final List<Message> messages = new ArrayList<>();
         final TextMessage textMessage1 = new TextMessage("원하시는 환율에 대한 통화를 차례로 입력해주세요.\n" +
                 "e.g. 1유로(EUR) 대비 원화(KRW)가 궁금할 땐\n[EURKRW]를 입력하시면 됩니다 :)");

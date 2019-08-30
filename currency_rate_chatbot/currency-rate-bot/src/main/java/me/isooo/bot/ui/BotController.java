@@ -20,10 +20,16 @@ import java.util.concurrent.*;
 public class BotController {
     private final LineMessagingClient lineMessagingClient;
     private final BotService botService;
+    private final SessionManager sessionManager;
 
-    public BotController(LineMessagingClient lineMessagingClient, BotService botService) {
+    public BotController(
+            LineMessagingClient lineMessagingClient,
+            BotService botService,
+            SessionManager sessionManager
+    ) {
         this.lineMessagingClient = lineMessagingClient;
         this.botService = botService;
+        this.sessionManager = sessionManager;
     }
 
     @EventMapping
@@ -31,7 +37,8 @@ public class BotController {
         log.info("event: {}", event);
         final String userMessage = event.getMessage().getText().toUpperCase();
         final String userId = event.getSource().getUserId();
-        final List<Message> messages = botService.handleTextContent(userId, userMessage);
+        final String sessionId = sessionManager.getUserSession(userId);
+        final List<Message> messages = botService.handleTextContent(sessionId, userMessage);
         reply(event.getReplyToken(), messages);
     }
 
@@ -39,7 +46,8 @@ public class BotController {
     public void handleStickerMessageEvent(MessageEvent<StickerMessageContent> event) {
         log.info("event: {}", event);
         final String userId = event.getSource().getUserId();
-        final List<Message> messages = botService.handleTextContent(userId, GuideMenu.HELP_TEXT);
+        final String sessionId = sessionManager.getUserSession(userId);
+        final List<Message> messages = botService.handleTextContent(sessionId, GuideMenu.HELP_TEXT);
         reply(event.getReplyToken(), messages);
     }
 

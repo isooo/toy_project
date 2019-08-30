@@ -26,14 +26,14 @@ public class CurrencyMenu implements Menu {
     }
 
     @Override
-    public List<Message> getMessages(String userId, String userMessage) {
-        log.info("userId: {}, userMessage: {}", userId, userMessage);
+    public List<Message> getMessages(String sessionId, String userMessage) {
+        log.info("userId: {}, userMessage: {}", sessionId, userMessage);
         try {
             final TextMessage textMessage = getCurrencyRateMessage(userMessage);
             return Collections.singletonList(textMessage);
         } catch (IllegalArgumentException e) {
             log.error("[IllegalArgumentException]", e);
-            return Collections.unmodifiableList(ExceptionMenu.unallowableCurrency(userId, userMessage));
+            return Collections.unmodifiableList(ExceptionMenu.unallowableCurrency(sessionId, userMessage));
         }
     }
 
