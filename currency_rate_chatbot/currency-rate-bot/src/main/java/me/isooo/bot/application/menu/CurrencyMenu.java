@@ -50,10 +50,10 @@ public class CurrencyMenu implements Menu {
                         QuickReply.items(
                                 Arrays.asList(
                                         QuickReplyItem.builder()
-                                                .action(new MessageAction("처음으로 돌아가기", StartMenu.Command))
+                                                .action(new MessageAction("처음으로 돌아가기", StartMenu.COMMAND))
                                                 .build(),
                                         QuickReplyItem.builder()
-                                                .action(new MessageAction(AmountMenu.Command, AmountMenu.Command))
+                                                .action(new MessageAction(AmountMenu.COMMAND, AmountMenu.COMMAND))
                                                 .build()
                                 )
                         )

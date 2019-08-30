@@ -11,9 +11,19 @@ import java.util.*;
 @Slf4j
 @Component
 public class AmountMenu implements Menu {
-    public static final String Command = "환전 금액 계산하기";
+    public static final String COMMAND = "환전 금액 계산하기";
+    private static List<String> CANDIDATES;
 
     private final UserMessageRepository userMessageRepository;
+
+    static {
+        CANDIDATES = Arrays.asList(
+                COMMAND,
+                "환전",
+                "환전 금액",
+                "환전 계산"
+        );
+    }
 
     public AmountMenu(UserMessageRepository userMessageRepository) {
         this.userMessageRepository = userMessageRepository;
@@ -21,7 +31,8 @@ public class AmountMenu implements Menu {
 
     @Override
     public boolean matches(String userMessage) {
-        return AmountMenu.Command.equals(userMessage);
+        return CANDIDATES.stream()
+                .anyMatch(candidate -> candidate.equals(userMessage));
     }
 
     @Override
