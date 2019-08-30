@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.*;
 @SpringBootTest
 @Transactional
 class BotServiceTest {
-    private final String userId = "test001";
+    private final String sessionId = "test001";
     @Autowired
     private UserMessageRepository userMessageRepository;
 
@@ -30,7 +30,7 @@ class BotServiceTest {
         final String userMessage = "help";
 
         // when
-        final List<Message> messages = service.handleTextContent(userId, userMessage);
+        final List<Message> messages = service.handleTextContent(sessionId, userMessage);
         final TextMessage message = (TextMessage) messages.get(1);
         final String text = message.getText();
 
@@ -45,7 +45,7 @@ class BotServiceTest {
         final String userMessage = "시작";
 
         // when
-        final List<Message> messages = service.handleTextContent(userId, userMessage);
+        final List<Message> messages = service.handleTextContent(sessionId, userMessage);
         final TextMessage message = (TextMessage) messages.get(0);
         final String text = message.getText();
 
@@ -61,7 +61,7 @@ class BotServiceTest {
         final String userMessage = "USDUSD";
 
         // when
-        final List<Message> messages = service.handleTextContent(userId, userMessage);
+        final List<Message> messages = service.handleTextContent(sessionId, userMessage);
         final TextMessage message = (TextMessage) messages.get(0);
         final String text = message.getText();
 
@@ -76,7 +76,7 @@ class BotServiceTest {
         final String userMessage = "XXXYYY";
 
         // when
-        final List<Message> messages = service.handleTextContent(userId, userMessage);
+        final List<Message> messages = service.handleTextContent(sessionId, userMessage);
         final TextMessage message = (TextMessage) messages.get(0);
         final String text = message.getText();
 
@@ -89,10 +89,10 @@ class BotServiceTest {
     void amountMenuGuideText() {
         // given
         final String userMessage = "환전 금액 계산하기";
-        this.userMessageRepository.save(new UserMessage(userId, "KRWUSD"));
+        this.userMessageRepository.save(new UserMessage(sessionId, "KRWUSD"));
 
         // when
-        final List<Message> messages = service.handleTextContent(userId, userMessage);
+        final List<Message> messages = service.handleTextContent(sessionId, userMessage);
         final TextMessage message = (TextMessage) messages.get(0);
         final String text = message.getText();
 
@@ -107,7 +107,7 @@ class BotServiceTest {
         final String userMessage = "환전 금액 계산하기";
 
         // when
-        final List<Message> messages = service.handleTextContent(userId, userMessage);
+        final List<Message> messages = service.handleTextContent(sessionId, userMessage);
         final TextMessage message = (TextMessage) messages.get(0);
         final String text = message.getText();
 
@@ -120,11 +120,11 @@ class BotServiceTest {
     void amountResultText() {
         // given
         final String userMessage = "1000";
-        this.userMessageRepository.save(new UserMessage(userId, "KRWKRW"));
+        this.userMessageRepository.save(new UserMessage(sessionId, "KRWKRW"));
 
 
         // when
-        final List<Message> messages = service.handleTextContent(userId, userMessage);
+        final List<Message> messages = service.handleTextContent(sessionId, userMessage);
         final TextMessage message = (TextMessage) messages.get(0);
         final String text = message.getText();
 
@@ -137,10 +137,10 @@ class BotServiceTest {
     void currencyRateEmptyGuideText2() {
         // given
         final String userMessage = "1000";
-        this.userMessageRepository.save(new UserMessage(userId, "XXXYYY"));
+        this.userMessageRepository.save(new UserMessage(sessionId, "XXXYYY"));
 
         // when
-        final List<Message> messages = service.handleTextContent(userId, userMessage);
+        final List<Message> messages = service.handleTextContent(sessionId, userMessage);
         final TextMessage message = (TextMessage) messages.get(0);
         final String text = message.getText();
 

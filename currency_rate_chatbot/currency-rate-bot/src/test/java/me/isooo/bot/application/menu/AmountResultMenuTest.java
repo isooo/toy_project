@@ -34,18 +34,18 @@ class AmountResultMenuTest {
     @InjectMocks
     private AmountResultMenu amountResultMenu;
 
-    private final String userId = "test001";
+    private final String sessionId = "test001";
 
     @DisplayName("유저가 통화를 입력하지 않은 상태에서 올바른 포맷의 금액을 입력했을 때, 통화 입력에 대한 가이드 테스트")
     @Test
     void currencyPairEmptyAndAllowableAmountPatternThenExceptionMenuTest() {
         // given
         final String userMessage = "1000";
-        when(userMessageRepository.findFirstByUserIdAndMessageTypeOrderByIdDesc(any(), any()))
+        when(userMessageRepository.findFirstBySessionIdAndMessageTypeOrderByIdDesc(any(), any()))
                 .thenReturn(Optional.empty());
 
         // when
-        final List<Message> messages = amountResultMenu.getMessages(userId, userMessage);
+        final List<Message> messages = amountResultMenu.getMessages(sessionId, userMessage);
         final TextMessage message = (TextMessage) messages.get(0);
 
         // then
@@ -58,13 +58,13 @@ class AmountResultMenuTest {
         // given
         final String userMessage = "1000";
         final String userCurrencyPair = "XXXYYY";
-        when(userMessageRepository.findFirstByUserIdAndMessageTypeOrderByIdDesc(any(), any()))
-                .thenReturn(Optional.of(new UserMessage(userId, userCurrencyPair)));
+        when(userMessageRepository.findFirstBySessionIdAndMessageTypeOrderByIdDesc(any(), any()))
+                .thenReturn(Optional.of(new UserMessage(sessionId, userCurrencyPair)));
         when(converter.convert(userCurrencyPair))
                 .thenThrow(new IllegalArgumentException());
 
         // when
-        final List<Message> messages = amountResultMenu.getMessages(userId, userMessage);
+        final List<Message> messages = amountResultMenu.getMessages(sessionId, userMessage);
         final TextMessage message = (TextMessage) messages.get(0);
 
         // then
@@ -79,13 +79,13 @@ class AmountResultMenuTest {
         final String userCurrencyPair = "USDEUR";
         final LocalDateTime now = LocalDateTime.now();
         final BigDecimal rate = new BigDecimal("1.123456");
-        when(userMessageRepository.findFirstByUserIdAndMessageTypeOrderByIdDesc(any(), any()))
-                .thenReturn(Optional.of(new UserMessage(userId, userCurrencyPair)));
+        when(userMessageRepository.findFirstBySessionIdAndMessageTypeOrderByIdDesc(any(), any()))
+                .thenReturn(Optional.of(new UserMessage(sessionId, userCurrencyPair)));
         when(converter.convert(any()))
                 .thenReturn(new CurrencyRate(Currency.USD, Currency.EUR, rate, now));
 
         // when
-        final List<Message> messages = amountResultMenu.getMessages(userId, userMessage);
+        final List<Message> messages = amountResultMenu.getMessages(sessionId, userMessage);
         final TextMessage message = (TextMessage) messages.get(0);
 
         // then
@@ -106,11 +106,11 @@ class AmountResultMenuTest {
         // given
         final String userCurrencyPair = "USDEUR";
         final LocalDateTime now = LocalDateTime.now();
-        when(userMessageRepository.findFirstByUserIdAndMessageTypeOrderByIdDesc(any(), any()))
-                .thenReturn(Optional.of(new UserMessage(userId, userCurrencyPair)));
+        when(userMessageRepository.findFirstBySessionIdAndMessageTypeOrderByIdDesc(any(), any()))
+                .thenReturn(Optional.of(new UserMessage(sessionId, userCurrencyPair)));
 
         // when
-        final List<Message> messages = amountResultMenu.getMessages(userId, userMessage);
+        final List<Message> messages = amountResultMenu.getMessages(sessionId, userMessage);
         final TextMessage message = (TextMessage) messages.get(0);
 
         // then
